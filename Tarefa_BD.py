@@ -1,5 +1,6 @@
 from Tarefa import tarefa
 from Contas import conta
+import pandas as pd
 
 class tarefa_bd():
     def __init__(self):
@@ -19,3 +20,9 @@ class tarefa_bd():
         self.tarefas_BD["Username"] = useratual["Username"]
 
         return self
+
+    def adicionar_aoBD(self, banco):
+        tempBD = pd.DataFrame({'Titulo': [self.tarefas_BD["Titulo"]], 'Descricao': [self.tarefas_BD["Descricao"]], 'Prioridade': [self.tarefas_BD["Prioridade"]], 'Data de Inicio': [self.tarefas_BD["Data de Inicio"]], 'Hora de Inicio': [self.tarefas_BD["Hora de Inicio"]], 'Data de Termino': [self.tarefas_BD["Data de Termino"]], 'Hora de Termino': [self.tarefas_BD["Hora de Termino"]], 'Username': [self.tarefas_BD["Username"]]})
+        banco = pd.concat([banco, tempBD], ignore_index=True)
+        banco.to_csv(f"tasks{self.tarefas_BD["Username"]}.csv", index=False)
+        return banco

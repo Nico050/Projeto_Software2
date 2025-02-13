@@ -1,3 +1,4 @@
+import pandas as pd
 
 class conta():
     def __init__(self):
@@ -27,6 +28,11 @@ class conta():
 
         return dicio
 
+    def registra_BD(self, banco):
+        tempBD = pd.DataFrame({'Nome': [self.nome], 'Sobrenome': [self.sobrenome], 'Username': [self.username], 'Email': [self.email], 'Senha': [self.password]})
+        banco = pd.concat([banco, tempBD], ignore_index=True)
+        banco.to_csv("users.csv", index=False)
+        return banco
 
 
     def __str__(self):
