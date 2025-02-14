@@ -19,13 +19,12 @@ usuario_atual = {}
 def iniciar():
     global contas, useratual, pd_contas, pd_datatask, tabset
     print("Bem-vindo ao sistema de gerenciamento de tarefas!")
-    print(contas)
     opc = input("Caso queira se registrar digite 1\nCaso queira fazer o login digite 2\n")
     if opc == "1":
         acc_reg = conta()
         acc_reg.registrar()
 
-        if acc_reg.username in pd_contas['Username'].values:
+        if acc_reg.username in pd_contas['Username'].values or " " in acc_reg.username:
             print("Usuário já registrado!")
             iniciar()
 
@@ -58,11 +57,12 @@ def iniciar():
 def main():
     opc = input(f"Olá {useratual['Nome']}! O que deseja fazer?\n1 - Adicionar tarefa\n2 - Ver tarefas\n3 - Remover tarefas\n4 - Alterar ou Registrar uma conta\n5 - Sair\n")
     if opc == "1":
-        global tabset, pd_datatask
+        global tabset, pd_datatask, contas
         task = tarefa_bd()
-        task.adicionar_tarefa(useratual)
+        task.adicionar_tarefa(useratual, contas)
         pd_datatask = task.adicionar_aoBD(pd_datatask)
         tabset.append(task.tarefas_BD)
+        task.adicionarBD_Envolvidos()
         print("Tarefa adicionada com sucesso!")
         main()
 
@@ -72,15 +72,25 @@ def main():
 
     elif opc == "3":
         n = input("Digite o título da tarefa que deseja remover: ")
+        x = 0
 
         for i in tabset:
-            if n == i["Titulo"]:
+            if n == i["Titulo"] and n in pd_datatask['Titulo'].values and useratual['Username'] == i["Username"]:
+                pd_datatask = pd_datatask[pd_datatask['Titulo'] != n]
+                pd_datatask.to_csv(f"tasks{useratual['Username']}.csv", index=False)
                 tabset.remove(i)
-                print("Tarefa removida com sucesso!")
+                if i["Envolvidos"] != "":
+                    for j in i["Envolvidos"].split():
+                        banco = pd.read_csv(f"tasks{j}.csv")
+                        banco = banco[banco['Titulo'] != n]
+                        banco.to_csv(f"tasks{j}.csv", index=False)
+                x = 1
                 break
-            else:
-                print("Tarefa não encontrada!")
 
+        if x == 0:
+            print("Tarefa não encontrada!")
+        else:
+            print("Tarefa removida com sucesso!")
         main()
 
     elif opc == "4":
