@@ -29,7 +29,7 @@ class conta():
         return dicio
 
     def registra_BD(self, banco):
-        tempBD = pd.DataFrame({'Nome': [self.nome], 'Sobrenome': [self.sobrenome], 'Username': [self.username], 'Email': [self.email], 'Senha': [self.password]})
+        tempBD = pd.DataFrame({'Nome': [self.nome], 'Sobrenome': [self.sobrenome], 'Username': [self.username], 'Email': [self.email], 'Senha': [str(self.password)]})
         banco = pd.concat([banco, tempBD], ignore_index=True)
         banco.to_csv("users.csv", index=False)
         return banco
