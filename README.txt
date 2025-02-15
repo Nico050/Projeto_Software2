@@ -6,3 +6,5 @@ Contas
 Tarefas_BD
 Tarefa
 finder_data_task
+finder_data_project
+Project
