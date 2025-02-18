@@ -16,6 +16,8 @@ def carregar_contas():
         contas = []
     return pd_contas, contas
 
+tabset = []
+tabsetpj = []
 pd_contas, contas = carregar_contas()
 pd_datatask = pd.DataFrame(columns=['Titulo', 'Descricao', 'Prioridade', 'Data de Inicio', 'Hora de Inicio', 'Data de Termino', 'Hora de Termino', 'Username'])
 pd_datapj = pd.DataFrame(columns=['Titulo', 'Descricao', 'Tarefas', 'Data de Inicio', 'Hora de Inicio', 'Data de Termino', 'Hora de Termino', 'Envolvidos', 'Manager'])
